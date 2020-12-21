@@ -1,0 +1,11 @@
+version: 1.0
+api-version: '1.16'
+name: HardPlus
+main: com.hardplus.plugin.HardPlusPlugin
+author: Josedx
+description: Provee de una dificultad extra al juego
+
+commands:
+  hardplus:
+    description: ALV el plugin
+
