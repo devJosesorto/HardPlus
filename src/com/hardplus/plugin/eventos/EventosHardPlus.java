@@ -4,11 +4,15 @@ package com.hardplus.plugin.eventos;
 import com.hardplus.plugin.HardPlusPlugin;
 import com.hardplus.plugin.items.ArmorHardPlus;
 import com.hardplus.plugin.items.ItemsHardPlus;
+import java.util.HashSet;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 
 //IMPORTACIONES EXTERNAS
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Rabbit;
 import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Villager;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -49,17 +53,36 @@ public class EventosHardPlus implements Listener {
             }
         }
 
+        if (e.getEntity() instanceof Rabbit) {
+            if (r > 0) {
+                armor.FullNtherite(e, 0);
+                Rabbit conejo = (Rabbit) e.getEntity();
+                conejo.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 78000, 1));
+                conejo.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 78000, 3));
+                conejo.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 78000, 5));
+
+                conejo.setRabbitType(Rabbit.Type.THE_KILLER_BUNNY);
+
+            } else {
+            }
+        }
+
+        
+         if (e.getEntity() instanceof Villager) {
+            e.getEntity().getWorld().spawnEntity(e.getLocation(), EntityType.ZOMBIE_VILLAGER);
+            e.getEntity().remove();
+        }
+
+        
         if (e.getEntity() instanceof Skeleton) {
             if (r > 0) {
                 armor.FullNtherite(e, 0);
                 EntityEquipment equipment = e.getEntity().getEquipment();
                 equipment.setItemInMainHand(objetos.MegaArco(1));
                 equipment.setItemInMainHandDropChance(1);
-                
-                
-                
+
                 e.getEntity().setArrowCooldown(2);
-                
+
             }
 
         }
@@ -77,7 +100,7 @@ public class EventosHardPlus implements Listener {
 
     }
 
-    /*@EventHandler
+    @EventHandler
     public static void processSkeletonArrows(ArrowBodyCountChangeEvent e) {
         LivingEntity fecha = e.getEntity();
 
@@ -90,32 +113,29 @@ public class EventosHardPlus implements Listener {
         System.out.println("entity living: " + fecha.getName());
         
 
-    }*/
+    }
     @EventHandler
     public void alv(EntityShootBowEvent e) {
 
-        
         System.out.println("Arco: " + e.getBow());
 
         System.out.println("Proyectil: " + e.getProjectile());
-        
+
         System.out.println("Velocidad: " + e.getProjectile().getVelocity());
-        
-        if(e.getBow().getItemMeta().getDisplayName().equalsIgnoreCase("Arco-TNT")){
-            Vector vector= new Vector();
-            float velocidad=5f;
-            
-            vector.setX(e.getProjectile().getVelocity().getX()*velocidad);
-            vector.setY(e.getProjectile().getVelocity().getY()*velocidad);
-            vector.setZ(e.getProjectile().getVelocity().getZ()*velocidad);
-            
+
+        if (e.getBow().getItemMeta().getDisplayName().equalsIgnoreCase("Arco-TNT")) {
+            Vector vector = new Vector();
+            float velocidad = 5f;
+
+            vector.setX(e.getProjectile().getVelocity().getX() * velocidad);
+            vector.setY(e.getProjectile().getVelocity().getY() * velocidad);
+            vector.setZ(e.getProjectile().getVelocity().getZ() * velocidad);
+
             e.getProjectile().setVelocity(vector);
             e.getProjectile().setGlowing(true);
             //e.getEntity().getWorld().createExplosion(e.getProjectile().getLocation(), 1);
-        
+
         }
-        
-        
 
     }
 

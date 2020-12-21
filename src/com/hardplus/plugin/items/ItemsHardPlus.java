@@ -15,6 +15,10 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public class ItemsHardPlus {
 
+    public ItemsHardPlus() {
+    }
+
+    
     public ItemStack hachacutre(int n) {
         //MATERIAL DEL OBJETO
         Material m = Material.IRON_AXE;
@@ -47,8 +51,8 @@ public class ItemsHardPlus {
 
         return item;
     }
-    
-        public ItemStack MegaArco(int n) {
+
+    public ItemStack MegaArco(int n) {
         //MATERIAL DEL OBJETO
         Material m = Material.BOW;
         //NOMBRE DEL OBJETO
@@ -70,6 +74,39 @@ public class ItemsHardPlus {
         itemmeta.setDisplayName(name);
         //OCULTAR ENCANTAMIENTOS
         //itemmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //OCULTAR ATRIBUTOS
+        //itemmeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        //AGREGAR ENCANTAMIENTOS
+        itemmeta.addEnchant(Enchantment.ARROW_DAMAGE, 15, true);
+
+        //SETEO DE LOS METADATOS DEL OBJETO
+        item.setItemMeta(itemmeta);
+
+        return item;
+    }
+
+    public ItemStack Marco(int n) {
+        //MATERIAL DEL OBJETO
+        Material m = Material.GOLD_NUGGET;
+        //NOMBRE DEL OBJETO
+        String name = "Marco";
+        //DESCRIPCION DEL OBJETO
+        String desc = "Moneda oficial del server";
+
+        //CREACION DEL OBJETO
+        ItemStack item = new ItemStack(m, n);
+
+        //META DATOS DEL OBJETO
+        ItemMeta itemmeta = item.getItemMeta();
+
+        //CREANDO EL LORE
+        ArrayList<String> lore = new ArrayList<String>();
+        lore.add(desc);
+        itemmeta.setLore(lore);
+        //SETEO DEL NOMBRE
+        itemmeta.setDisplayName(name);
+        //OCULTAR ENCANTAMIENTOS
+        itemmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         //OCULTAR ATRIBUTOS
         //itemmeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         //AGREGAR ENCANTAMIENTOS
