@@ -4,12 +4,13 @@ package com.hardplus.plugin.eventos;
 import com.hardplus.plugin.HardPlusPlugin;
 import com.hardplus.plugin.items.ArmorHardPlus;
 import com.hardplus.plugin.items.ItemsHardPlus;
-import java.util.HashSet;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
 //IMPORTACIONES EXTERNAS
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Rabbit;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Villager;
@@ -32,6 +33,10 @@ import org.bukkit.util.Vector;
 public class EventosHardPlus implements Listener {
 
     private HardPlusPlugin plugin;
+    public static boolean arco_tnt = false;
+    public static boolean arco_tp = false;
+
+    public static Entity player = null;
 
     ItemsHardPlus objetos = new ItemsHardPlus();
     ArmorHardPlus armor = new ArmorHardPlus();
@@ -67,13 +72,11 @@ public class EventosHardPlus implements Listener {
             }
         }
 
-        
-         if (e.getEntity() instanceof Villager) {
+        if (e.getEntity() instanceof Villager) {
             e.getEntity().getWorld().spawnEntity(e.getLocation(), EntityType.ZOMBIE_VILLAGER);
             e.getEntity().remove();
         }
 
-        
         if (e.getEntity() instanceof Skeleton) {
             if (r > 0) {
                 armor.FullNtherite(e, 0);
@@ -102,44 +105,50 @@ public class EventosHardPlus implements Listener {
 
     @EventHandler
     public static void processSkeletonArrows(ArrowBodyCountChangeEvent e) {
-        LivingEntity fecha = e.getEntity();
+        if (arco_tnt) {
 
-        e.setNewAmount(0);
-        e.getEntity().getWorld().createExplosion(fecha.getLocation(), 1);
+            LivingEntity fecha = e.getEntity();
+            e.setNewAmount(0);
+            e.getEntity().getWorld().createExplosion(fecha.getLocation(), 1);
+            System.out.println("Entidad desde ArrowBodyCountChangeEvent \n" + fecha.getName() + "\n");
+        }
 
-        System.out.println("Amount new: " + e.getNewAmount());
-        System.out.println("Amount old: " + e.getOldAmount());
-        System.out.println("name event: " + e.getEventName());
-        System.out.println("entity living: " + fecha.getName());
-        
+        if (arco_tp) {
+            Location local = player.getLocation();
+            player.teleport(e.getEntity().getLocation());
+            e.getEntity().teleport(local);
+            arco_tp = false;
+            player = null;
+        }
 
     }
+
     @EventHandler
     public void alv(EntityShootBowEvent e) {
 
-        System.out.println("Arco: " + e.getBow());
-
-        System.out.println("Proyectil: " + e.getProjectile());
-
-        System.out.println("Velocidad: " + e.getProjectile().getVelocity());
-
         if (e.getBow().getItemMeta().getDisplayName().equalsIgnoreCase("Arco-TNT")) {
             Vector vector = new Vector();
-            float velocidad = 5f;
-
+            float velocidad = 2f;
             vector.setX(e.getProjectile().getVelocity().getX() * velocidad);
             vector.setY(e.getProjectile().getVelocity().getY() * velocidad);
             vector.setZ(e.getProjectile().getVelocity().getZ() * velocidad);
-
+            System.out.println("Player desde EntityShootBowEvent \n" + e.getEntity().getLocation() + "\n");
             e.getProjectile().setVelocity(vector);
-            e.getProjectile().setGlowing(true);
-            //e.getEntity().getWorld().createExplosion(e.getProjectile().getLocation(), 1);
+            //arco_tnt = true;
+
+            arco_tp = true;
+
+            player = e.getEntity();
 
         }
 
     }
 
     public int random() {
+        return ((int) (Math.random() * 100));
+    }
+
+    public int arcoTP() {
         return ((int) (Math.random() * 100));
     }
 
